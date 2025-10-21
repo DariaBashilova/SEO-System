@@ -43,8 +43,8 @@ const modalData = {
   }
 };
 
-// Функция проверки, является ли текущее устройство мобильным (<= 768px)
-const isMobile = () => window.innerWidth <= 768;
+// Функция проверки, является ли текущее устройство мобильным (<= 390px)
+const isMobile = () => window.innerWidth <= 390;
 
 // Глобальные переменные для элементов
 let modalOverlay, servicesContainer, mainCard, sideCards;
@@ -64,7 +64,7 @@ function handleCardClick(clickedCard) {
 
     if (!isModalAlreadyOpen) {
       modalOverlay.classList.add('active');
-      modalOverlay.style.height = '348px';
+       
     }
 
     modalOverlay.scrollIntoView({
@@ -100,7 +100,7 @@ function initializeServiceCards() {
     const initialCardIndex = '1';
     createModalMobile(initialCardIndex, modalData[initialCardIndex]);
     modalOverlay.classList.add('active');
-    modalOverlay.style.height = '348px';
+    
   }
 }
 
@@ -192,8 +192,7 @@ function createModalMobile(activeIndex, activeData) {
   closeBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
   closeBtn.addEventListener('click', () => {
     modalOverlay.classList.remove('active');
-    modalOverlay.style.height = '0';
-  });
+     });
   modalOverlay.appendChild(closeBtn);
 
   const modalCardsContainer = document.createElement('div');
@@ -263,11 +262,8 @@ function closeModal(immediate = false) {
       sideCards.forEach((card) => {
         card.style.order = 'unset';
       });
-      modalOverlay.style.order = '999';
-    } else {
-      // Сброс для МОБИЛЬНОГО
-      modalOverlay.style.height = '0';
-    }
+      // modalOverlay.style.order = '999';
+    }  
 
     modalOverlay.removeAttribute('data-index');
     modalOverlay.innerHTML = '';
@@ -450,40 +446,49 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Timer Script 
-  const timerDays = document.querySelector('.timer__unit:nth-child(1) .timer__number');
-  const timerHours = document.querySelector('.timer__unit:nth-child(3) .timer__number');
-  const timerMinutes = document.querySelector('.timer__unit:nth-child(5) .timer__number');
-  const timerSeconds = document.querySelector('.timer__unit:nth-child(7) .timer__number');
+// Timer Script
+const timerDays = document.querySelector('.timer__unit:nth-child(1) .timer__number');
+const timerHours = document.querySelector('.timer__unit:nth-child(3) .timer__number');
+const timerMinutes = document.querySelector('.timer__unit:nth-child(5) .timer__number');
+const timerSeconds = document.querySelector('.timer__unit:nth-child(7) .timer__number');
 
-  if (timerDays && timerHours && timerMinutes && timerSeconds) {
-    const endDate = new Date();
-    endDate.setMonth(endDate.getMonth() + 1);
+if (timerDays && timerHours && timerMinutes && timerSeconds) {
+
+    // 1. Получаем начальные значения и преобразуем их в числа (parseInt)
+    let days = parseInt(timerDays.textContent, 10);
+    let hours = parseInt(timerHours.textContent, 10);
+    let minutes = parseInt(timerMinutes.textContent, 10);
+    let seconds = parseInt(timerSeconds.textContent, 10);
 
     function updateTimer() {
-      const now = new Date();
-      const timeLeft = endDate - now;
+        if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+            clearInterval(timerInterval); // Останавливаем таймер, когда достигнет 0
+            return;
+        }
 
-      if (timeLeft <= 0) {
-        timerDays.textContent = '00';
-        timerHours.textContent = '00';
-        timerMinutes.textContent = '00';
-        timerSeconds.textContent = '00';
-        return;
-      }
+        // 2. Логика уменьшения времени
+        seconds--;
 
-      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        if (seconds < 0) {
+            seconds = 59;
+            minutes--;
+        }
+        if (minutes < 0) {
+            minutes = 59;
+            hours--;
+        }
+        if (hours < 0) {
+            hours = 23;
+            days--;
+        }
 
-      timerDays.textContent = days.toString().padStart(2, '0');
-      timerHours.textContent = hours.toString().padStart(2, '0');
-      timerMinutes.textContent = minutes.toString().padStart(2, '0');
-      timerSeconds.textContent = seconds.toString().padStart(2, '0');
+        // 3. Обновляем DOM
+        timerDays.textContent = String(days).padStart(2, '0');
+        timerHours.textContent = String(hours).padStart(2, '0');
+        timerMinutes.textContent = String(minutes).padStart(2, '0');
+        timerSeconds.textContent = String(seconds).padStart(2, '0');
     }
 
-    updateTimer();
-    setInterval(updateTimer, 1000);
-  }
+    const timerInterval = setInterval(updateTimer, 1000); // Сохраняем ссылку на интервал
+}
 });
