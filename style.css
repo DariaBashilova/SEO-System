@@ -1,11 +1,14 @@
+/* ===== HEADER STYLES ===== */
 .header {
   padding-top: clamp(15px, 2vw, 20px);
   padding-right: clamp(30px, 3vw, 40px);
-  padding-bottom: clamp(30px, 5vw, 40px);
   padding-left: clamp(20px, 3vw, 30px);
 }
 
 .header__top {
+  width: 100%;
+  max-width: 1365px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -61,6 +64,7 @@
 .header__link:hover {
   background-color: var(--secondary2-transparent);
   border-radius: clamp(12px, 2vw, 16px);
+  padding: clamp(6px, 1vw, 9px) clamp(8px, 1.5vw, 10px);
 }
 
 .header__right {
@@ -126,45 +130,51 @@
 }
 
 .service-list {
-  width: clamp(700px, 85vw, 1215px);
-  height: clamp(30px, 4vw, 36px);
-  margin: clamp(10px, 2vw, 15px) auto 0;
-  border-radius: clamp(12px, 2vw, 16px);
-  background: var(--additionally);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  max-width: 1365px;
+  margin: 0 auto;
   padding: 0 clamp(10px, 3vw, 20px);
+}
+
+.service-link-list {
+  width: 100%;
+  max-width: 1214px;
+  display: flex;
+  background-color: var(--additionally);
+  border-radius: clamp(12px, 2vw, 16px);
+  padding: clamp(4px, 0.8vw, 6px) clamp(8px, 1.5vw, 10px) 0
+    clamp(8px, 1.5vw, 10px);
+  justify-content: center;
+}
+
+.service-link-list-item {
+  font-family: var(--font-family);
+  line-height: 150%;
+  color: var(--main-text);
+  font-size: clamp(13px, 1.1vw, 14px);
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: clamp(4px, 0.8vw, 6px) clamp(8px, 1.5vw, 6px);
 }
 
 .service-more-btn {
   display: none;
 }
 
-.service-link-list {
-  display: flex;
-  border-radius: clamp(12px, 2vw, 16px);
-  padding: clamp(4px, 0.8vw, 6px) clamp(8px, 1.5vw, 10px);
-  background-color: var(--additionally);
+/* ===== MAIN SECTION STYLES ===== */
+.main {
+  width: 100%;
+  max-width: 1365px;
+  margin: 0 auto;
+  padding: 0 clamp(15px, 3vw, 30px);
 }
 
-.service-link-list-item {
-  font-family: var(--font-family);
-  font-weight: 400;
-  line-height: 150%;
-  color: var(--main-text);
-  font-size: clamp(13px, 1.1vw, 16px);
-  flex-shrink: 0;
-  white-space: nowrap;
-  padding: clamp(4px, 0.8vw, 6px) clamp(8px, 1.5vw, 6px);
-}
-
-.header__text {
+.main-intro {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: clamp(20px, 5vw, 40px);
-  margin-top: clamp(20px, 5vw, 40px);
+  margin: clamp(20px, 5vw, 40px) 0;
 }
 
 .aligned-text {
@@ -180,7 +190,6 @@
 .aligned-text svg {
   width: 1em;
   height: 1em;
-  /* vertical-align: middle;  */
   flex-shrink: 0;
   display: inline-block;
 }
@@ -209,13 +218,12 @@
   color: var(--main-text);
 }
 
+/* ===== SERVICES CONTAINER STYLES ===== */
 .services-container {
   display: flex;
   gap: clamp(8px, 1.5vw, 15px);
   align-items: flex-start;
-  margin: clamp(30px, 4vw, 50px) 0;
-  position: relative;
-  min-height: clamp(300px, 25vw, 348px);
+  transition: all 0.4s ease;
 }
 
 .main-card {
@@ -227,6 +235,7 @@
   min-width: unset;
   flex-grow: 3;
   min-height: clamp(300px, 25vw, 348px);
+  box-sizing: border-box;
 }
 
 .main-card-bg {
@@ -248,6 +257,7 @@
   flex-direction: column;
   justify-content: space-between;
   padding: clamp(15px, 2vw, 25px);
+  box-sizing: border-box;
 }
 
 .tags-container {
@@ -266,7 +276,8 @@
   border: 1px solid var(--white);
   border-radius: clamp(10px, 1vw, 14px);
   padding: clamp(0px, 0.5vw, 5px) clamp(5px, 1vw, 10px);
-  width: clamp(100px, 12vw, 145px);
+  width: auto;
+  min-width: clamp(35px, 3.5vw, 44px);
   height: clamp(25px, 2.5vw, 30px);
   backdrop-filter: blur(72.72222137451172px);
   box-shadow: inset 0 2px 2px 0 rgba(255, 255, 255, 0.15),
@@ -281,8 +292,6 @@
   line-height: 150%;
   color: var(--white);
   white-space: nowrap;
-  width: auto;
-  min-width: clamp(35px, 3.5vw, 44px);
 }
 
 .dot {
@@ -305,12 +314,6 @@
   align-items: center;
   gap: clamp(8px, 1.5vw, 12px);
   margin-top: auto;
-}
-
-.main-card-text svg {
-  width: 2em;
-  height: 2em;
-  flex-shrink: 0;
 }
 
 .main-card-text svg {
@@ -342,6 +345,7 @@
   font-size: clamp(14px, 1.5vw, 16px);
 }
 
+/* ===== SIDE CARDS STYLES ===== */
 .side-card {
   width: clamp(50px, 6vw, 69px);
   height: clamp(250px, 30vw, 348px);
@@ -351,8 +355,8 @@
   backdrop-filter: blur(72.72222137451172px);
   cursor: pointer;
   transition: all 0.4s ease;
-  flex-shrink: 0; /* ЗАПРЕЩАЕМ сжиматься */
-  flex-grow: 0; /* ЗАПРЕЩАЕМ расти */
+  flex-shrink: 0;
+  flex-grow: 0;
   position: relative;
   overflow: hidden;
 }
@@ -411,7 +415,7 @@
   font-size: clamp(14px, 1.5vw, 16px);
 }
 
-/* Модальное окно */
+/* ===== MODAL STYLES ===== */
 .modal-overlay {
   display: flex;
   position: relative;
@@ -423,7 +427,7 @@
   z-index: 1000;
   justify-content: center;
   align-items: center;
-  /* order: 999; */
+  order: 999;
   flex-shrink: 0;
   flex-grow: 0;
   opacity: 0;
@@ -563,17 +567,15 @@
   margin-top: auto;
 }
 
+/* ===== STATS TEXT STYLES ===== */
+.stats-text-mob {
+  display: none;
+}
 .stats-text {
   display: flex;
   gap: clamp(40px, 6vw, 67px);
+  padding-top: clamp(20px, 2vw, 25px);
   padding-bottom: clamp(30px, 4vw, 40px);
-}
-
-.stats-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: clamp(30px, 5vw, 50px);
 }
 
 .text {
@@ -582,6 +584,14 @@
   font-size: clamp(12px, 1.2vw, 14px);
   line-height: 150%;
   color: var(--main-text);
+}
+
+/* ===== STATS SECTION STYLES ===== */
+.stats-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: clamp(15px, 5vw, 67px);
 }
 
 .stats-header {
@@ -599,12 +609,6 @@
   color: var(--main-text);
 }
 
-.stats-item svg {
-  border-radius: 33px;
-  padding: 3px 6px;
-  background: var(--additionally);
-}
-
 .stats-list {
   display: flex;
   gap: clamp(20px, 3vw, 36px);
@@ -618,6 +622,12 @@
   display: flex;
   align-items: center;
   gap: clamp(8px, 1vw, 12px);
+}
+
+.stats-item svg {
+  border-radius: 33px;
+  padding: 3px 6px;
+  background: var(--additionally);
 }
 
 .stats-icon {
@@ -662,9 +672,12 @@
   color: var(--main-text);
 }
 
-/* Advantage Section */
+/* ===== ADVANTAGE SECTION STYLES ===== */
 .advantage {
-  padding: clamp(40px, 8vw, 80px) 0;
+  width: 100%;
+  max-width: 1365px;
+  margin: 0 auto;
+  padding: clamp(40px, 8vw, 50px) clamp(15px, 3vw, 30px);
 }
 
 .advantage__container {
@@ -683,6 +696,7 @@
 .advantage__text {
   flex: 1;
   min-width: clamp(200px, 20vw, 300px);
+  padding-right: 40px;
 }
 
 .advantage__subtitle {
@@ -713,6 +727,7 @@
   flex-direction: column;
   gap: clamp(15px, 3vw, 15px);
   margin-top: clamp(20px, 3.5vw, 40px);
+  align-items: flex-end;
 }
 
 .advantage__desc-item {
@@ -722,24 +737,24 @@
   line-height: 150%;
   color: var(--text-2);
   margin: 0;
+  width: 408px;
 }
 
 .advantage__cards {
   display: flex;
   gap: clamp(10px, 2vw, 20px);
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .advantage-card {
   border-radius: clamp(15px, 3vw, 30px);
   flex: 1;
   min-width: clamp(200px, 20vw, 280px);
-  max-width: clamp(300px, 35vw, 418px);
+  max-width: clamp(300px, 35vw, 435px);
   height: clamp(450px, 50vw, 637px);
   position: relative;
   cursor: pointer;
   transition: all 0.6s ease;
-  /* overflow: hidden; */
   perspective: 1000px;
   transform-style: preserve-3d;
   background-color: var(--main-text, #393939);
@@ -773,7 +788,6 @@
   backface-visibility: hidden;
 }
 
-/* ЛИЦЕВАЯ СТОРОНА */
 .advantage-card[data-index="1"] .advantage-card__front,
 .advantage-card[data-index="3"] .advantage-card__front {
   justify-content: space-between;
@@ -815,7 +829,6 @@
   max-width: 100%;
 }
 
-/* ОБРАТНАЯ СТОРОНА */
 .advantage-card__back {
   background: var(--additionally);
   opacity: 0;
@@ -824,6 +837,8 @@
   justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
+  padding: clamp(15px, 3vw, 25px);
+  overflow: hidden;
 }
 
 .advantage-card.active .advantage-card__back {
@@ -873,9 +888,10 @@
   color: var(--main-text);
   max-width: 100%;
   text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
-/* Декоративная линия */
 .advantage-divider {
   width: clamp(150px, 30vw, 340px);
   height: 2px;
@@ -884,8 +900,6 @@
   stroke-width: 1px;
 }
 
-/* Расположение элементов на обратной стороне */
-/* Для карточек 1 и 3 */
 .advantage-card[data-index="1"] .advantage-card__back,
 .advantage-card[data-index="3"] .advantage-card__back {
   justify-content: flex-start;
@@ -901,7 +915,6 @@
   margin-top: clamp(15px, 2.5vw, 25px);
 }
 
-/* Для карточки 2 */
 .advantage-card[data-index="2"] .advantage-card__back {
   justify-content: flex-start;
 }
@@ -914,9 +927,13 @@
   margin: 0 0 auto 0;
 }
 
-/* Services Section */
+/* ===== SERVICES SECTION STYLES ===== */
 .services {
-  padding: clamp(40px, 8vw, 80px) 0;
+  width: 100%;
+  max-width: 1365px;
+  margin: 0 auto;
+  padding: 0 clamp(15px, 3vw, 30px);
+  box-sizing: border-box;
 }
 
 .services__container {
@@ -925,7 +942,6 @@
   gap: clamp(30px, 6vw, 60px);
 }
 
-/* Заголовок секции */
 .services__header {
   display: flex;
   justify-content: space-between;
@@ -950,23 +966,24 @@
   margin: 0;
 }
 
-/* Карточки услуг */
 .services__cards {
   display: flex;
-  /* flex-wrap: wrap; */
   gap: clamp(20px, 4vw, 46px);
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .service-card {
-  width: clamp(280px, 35vw, 407px);
+  flex: 1;
+  min-width: 280px;
+  max-width: 427px;
   height: clamp(350px, 40vw, 444px);
   background: var(--additionally);
   border-radius: clamp(20px, 3vw, 30px);
-  padding: clamp(20px, 4vw, 40px);
+  padding: clamp(20px, 4vw, 50px);
   display: flex;
   flex-direction: column;
   position: relative;
+  box-sizing: border-box;
 }
 
 .service-card__top {
@@ -1046,14 +1063,21 @@
   margin-bottom: clamp(5px, 1vw, 13px);
 }
 
-/* Banner Section */
+/* ===== FOOTER STYLES ===== */
+.footer-section {
+  width: 100%;
+  max-width: 1365px;
+  padding: 0 clamp(15px, 3vw, 30px);
+  margin: 0 auto;
+}
+
 .banner {
   background: url("./images/9.png") center/cover no-repeat;
   border-radius: clamp(20px, 3vw, 30px);
-  padding: clamp(40px, 6vw, 60px) clamp(20px, 4vw, 40px);
   position: relative;
   overflow: hidden;
-  margin: clamp(40px, 8vw, 80px) 0 clamp(20px, 4vw, 40px);
+  margin: clamp(40px, 8vw, 80px) auto clamp(20px, 4vw, 40px);
+  box-sizing: border-box;
 }
 
 .banner__content {
@@ -1063,14 +1087,16 @@
   gap: clamp(20px, 4vw, 40px);
   position: relative;
   z-index: 2;
+  padding: clamp(30px, 5vw, 50px);
+  box-sizing: border-box;
 }
 
-/* Left Side */
 .banner__left {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: clamp(15px, 3vw, 30px);
+  max-width: 811px;
 }
 
 .banner__title {
@@ -1243,39 +1269,58 @@
   display: block;
 }
 
+/* ===== RESPONSIVE STYLES ===== */
+
+@media (min-width: 1200px) {
+  .service-card__icon {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    flex-shrink: 0;
+  }
+
+  .banner__offer {
+    min-width: clamp(280px, 35vw, 350px);
+  }
+}
+
 @media (max-width: 1194px) {
   .header {
     padding: clamp(15px, 2.5vw, 25px) clamp(20px, 4vw, 40px);
   }
 
-  .service-link-list {
-    width: clamp(200px, 90%, 900px);
-    justify-content: flex-start;
-  }
-
-  .service-link-list-item:nth-child(6),
-  .service-link-list-item:nth-child(7),
-  .service-link-list-item:nth-child(8) {
+  .dot {
     display: none;
   }
 
+  .service-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(10px, 3vw, 20px);
+  }
+
   .service-link-list {
-    gap: clamp(5px, 1.2vw, 10px);
-    margin-right: clamp(15px, 3vw, 30px);
+    flex: 1;
+    padding-bottom: 5px;
   }
 
   .service-more-btn {
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    color: var(--main);
     margin-left: clamp(10px, 2vw, 20px);
+    white-space: nowrap;
     font-family: var(--font-family);
-    font-weight: 500;
-    font-size: clamp(13px, 1.2vw, 16px);
-    line-height: 100%;
-    text-decoration: none;
-    gap: clamp(5px, 1vw, 8px);
+    line-height: 150%;
+    color: var(--main);
+    font-size: clamp(13px, 1.1vw, 14px);
+  }
+
+  .service-link-list-item:nth-child(6),
+  .service-link-list-item:nth-child(7),
+  .service-link-list-item:nth-child(8) {
+    display: none;
   }
 
   .service-more-btn svg {
@@ -1296,8 +1341,16 @@
     gap: clamp(6px, 0.5vw, 5px);
   }
 
+  .main {
+    padding: 0 clamp(15px, 5vw, 44px) 0;
+  }
+
+  .aligned-text {
+    font-size: clamp(30px, 3vw, 40px);
+  }
+
   .main-card {
-    width: clamp(500px, 50vw, 614px);
+    width: clamp(491px, 46vw, 614px);
     height: clamp(220px, 28vw, 348px);
     flex-shrink: 0;
   }
@@ -1311,7 +1364,7 @@
   }
 
   .side-card {
-    height: clamp(250px, 30vw, 336px);
+    height: clamp(250px, 28vw, 336px);
   }
 
   .side-card__text {
@@ -1329,13 +1382,15 @@
   }
 
   .modal-bg {
+    width: clamp(150px, 18vw, 222px);
     height: clamp(250px, 28vw, 348px);
   }
 
   .modal-content {
-    width: clamp(150px, 17vw, 187px);
-    height: clamp(250px, 26vw, 318px);
+    width: clamp(150px, 16vw, 187px);
+    height: clamp(250px, 25vw, 318px);
   }
+
   .modal-icon {
     width: calc(40px + 1vw);
     height: calc(40px + 1vw);
@@ -1346,11 +1401,15 @@
   }
 
   .modal-title {
-    font-size: clamp(18px, 2.5vw, 21px);
+    font-size: clamp(18px, 1.5vw, 21px);
   }
 
   .modal-description {
-    font-size: clamp(12px, 1.5vw, 14px);
+    font-size: clamp(12px, 0.5vw, 14px);
+  }
+
+  .advantage__title {
+    font-size: clamp(40px, 7vw, 64px);
   }
 
   .advantage__cards {
@@ -1361,12 +1420,20 @@
     padding: clamp(20px, 4vw, 5px);
   }
 
+  .advantage-card__title {
+    font-size: clamp(24px, 4vw + 0.5rem, 32px);
+  }
+
+  .advantage-card__number {
+    font-size: clamp(18px, 2.5vw, 20px);
+  }
+
   .advantage-divider {
     width: clamp(150px, 30vw, 310px);
   }
 
   .stats-text {
-    margin-top: 15px;
+    padding-top: 0;
   }
 
   .stats-list {
@@ -1375,8 +1442,8 @@
 
   .stats-item {
     border-radius: clamp(20px, 3vw, 30px);
-    padding: clamp(25px, 3vw, 32px) clamp(15px, 2vw, 20px);
-    width: clamp(170px, 17vw, 189px);
+    padding: clamp(25px, 3vw, 32px) clamp(11px, 1vw, 20px);
+    width: clamp(159px, 14vw, 189px);
     height: clamp(80px, 8.5vw, 87px);
     flex-shrink: 0;
     flex-grow: 0;
@@ -1385,6 +1452,11 @@
 
   .stats-number {
     font-size: clamp(20px, 2.5vw, 20px);
+  }
+
+  .stats-icon {
+    width: calc(40px + 1vw);
+    height: calc(40px + 1vw);
   }
 
   .service-card {
@@ -1397,9 +1469,11 @@
   .service-card__content {
     gap: 0;
   }
+
   .service-card__tag {
     font-size: clamp(12px, 0.2vw, 14px);
   }
+
   .service-card__arrow {
     top: clamp(20px, 4vw, 20px);
     right: clamp(20px, 3vw, 20px);
@@ -1448,56 +1522,82 @@
   }
 }
 
-@media (max-width: 768px) and (min-width: 390px) {
-  .service-link-list {
-    padding: 0;
-  }
-  .main-card {
-    width: clamp(397px, 50vw, 614px);
-    height: clamp(220px, 28vw, 348px);
-  }
-
+@media (max-width: 967px) {
   .services-container {
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 5px;
   }
-  .modal-content {
-    width: clamp(162px, 17vw, 187px);
-    height: clamp(233px, 26vw, 318px);
-  }
-
-  .stats-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: clamp(20px, 3vw, 36px);
-  }
-}
-
-@media (max-width: 390px) {
-  .header__links-list,
-  .header__right,
-  .header .button,
-  .header__mobile-menu-btn,
-  .header__mobile-phone-btn,
-  .service-list,
-  .stats-text,
-  .dot {
+  .stats-text {
     display: none;
   }
 
+  .main-card {
+    flex: 0 0 100%;
+    margin-bottom: 15px;
+  }
+
+  .modal-bg {
+    width: clamp(200px, 18vw, 222px);
+    height: clamp(300px, 28vw, 348px);
+  }
+
+  .side-card {
+    height: clamp(286px, 28vw, 336px);
+  }
+
+  .service-link-list {
+    /* overflow-x: auto; */
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding-bottom: px;
+  }
+
+  .modal-content {
+    width: clamp(150px, 14vw, 187px);
+    height: clamp(270px, 26vw, 318px);
+  }
+
+  .accent {
+    margin-bottom: clamp(10px, 1vw, 20px);
+  }
+
+  .service-link-list-item,
+  .service-more-btn {
+    font-size: clamp(10px, 1.1vw, 14px);
+  }
+
+  .service-list {
+    margin-top: 10px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .advantage-card__title {
+    font-size: clamp(24px, 4vw + 0.5rem, 24px);
+  }
+
+  .advantage-card__content {
+    font-size: clamp(14px, 1.5vw + 0.5rem, 14px);
+  }
+
+  .services__cards {
+    display: flex;
+    gap: 20px;
+    transition: all 0.3s ease;
+  }
+}
+
+@media (max-width: 768px) {
   .header__mobile-menu-btn,
   .header__mobile-phone-btn {
     display: block;
     flex-shrink: 0;
     stroke: var(--main-text, black);
   }
+
   .header {
     padding: 0;
-  }
-  .header__top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
 
   .header__mobile-menu-btn svg {
@@ -1534,15 +1634,66 @@
     flex-shrink: 0;
   }
 
-  .logo {
-    max-width: 80px;
-    height: auto;
+  .header__links-list,
+  .header__right,
+  .header .button,
+  .header__mobile-menu-btn,
+  .header__mobile-phone-btn,
+  .service-list {
+    display: none;
   }
 
-  .header__text {
-    flex-direction: column;
+  .header__top {
+    display: grid;
+    grid-template-columns: 40px 1fr 40px;
+    align-items: center;
+    justify-items: center;
+    padding: 10px 20px;
     gap: 15px;
   }
+
+  .logo {
+    grid-column: 2;
+    justify-self: center;
+  }
+
+  .header__mobile-menu-btn {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .header__mobile-phone-btn {
+    grid-column: 3;
+    justify-self: end;
+  }
+
+  .main {
+    padding: 0 20px;
+  }
+
+  .main-card {
+    width: 100%;
+    margin: 15px 0;
+  }
+
+  .services-container {
+    flex-direction: column;
+    align-items: center;
+    /* gap: 15px; */
+  }
+
+  .modal-overlay.active {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .main-intro {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+
   .right-text {
     padding-left: 60px;
   }
@@ -1550,7 +1701,6 @@
   .services-container {
     flex-direction: column;
     padding: 0;
-    align-items: flex-start;
     gap: 11px;
   }
 
@@ -1559,42 +1709,36 @@
     width: clamp(300px, 50vw, 614px);
     height: clamp(250px, 28vw, 348px);
   }
-
+  .main-card-content {
+  }
   .side-card-text {
     transform: rotate(-90deg);
-
     font-size: 14px;
   }
 
-  .side-card {
-    /* flex-shrink: 0;
-   height: clamp(116px, 30vw, 336px);  */
-  }
-  .modal-bg-mobile,
-  .modal-overlay,
-  .modal__cards-wrapper {
-    display: none;
-  }
-
   .modal-overlay {
-    flex-basis: 100%; /* Принудительно занимает всю ширину контейнера */
-    order: 100; /* Переносится в конец, под все карточки */
+    flex-basis: 100%;
+    order: 100;
   }
 
   .modal-overlay.active {
     width: clamp(306px, 18vw, 252px);
   }
+
   .modal-content {
-    width: clamp(156px, 17vw, 187px);
+    margin: 0 10px;
+    width: clamp(140px, 17vw, 187px);
     height: clamp(258px, 26vw, 318px);
   }
 
   .modal-bg {
     height: clamp(285px, 29vw, 347px);
   }
+
   .modal-title {
     font-size: clamp(15px, 2.5vw, 21px);
   }
+
   .modal-icon {
     padding: 10px;
   }
@@ -1602,6 +1746,7 @@
   .stats-section {
     flex-direction: column;
   }
+
   .stats-header {
     margin-bottom: 10px;
   }
@@ -1621,36 +1766,43 @@
     align-items: flex-start;
   }
 
+  .stats-header {
+    padding-top: 10px;
+  }
+
   .advantage {
-    padding: 0;
+    padding: clamp(40px, 8vw, 50px) clamp(15px, 3vw, 30px) 0;
   }
 
   .advantage__header {
     gap: 0;
     flex-direction: column;
+    padding: clamp(40px, 8vw, 50px) clamp(15px, 3vw, 30px);
+    align-items: center;
   }
+
+  .advantage__container {
+    gap: clamp(30px, 4vw, 60px);
+  }
+
   .advantage__title {
-    font-size: clamp(38px, 7vw, 74px);
+    font-size: clamp(38px, 3vw, 74px);
   }
 
   .advantage__cards {
-    /* flex-direction: column; */
     align-items: center;
     flex-wrap: nowrap;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     justify-content: flex-start;
-    align-items: stretch; /* Важно для карточек с разной высотой */
-    -webkit-overflow-scrolling: touch;
+    align-items: stretch;
     scrollbar-width: none;
-    margin: 0 -20px;
-    padding-left: 20px;
-    padding-bottom: 20px;
   }
 
   .advantage__cards::-webkit-scrollbar {
     display: none;
   }
+
   .advantage-card {
     width: 85vw;
     min-width: clamp(340px, 20vw, 280px);
@@ -1659,16 +1811,29 @@
     margin-right: 20px;
   }
 
+  .advantage-card__content {
+    font-size: clamp(14px, 1.5vw + 0.5rem, 14px);
+  }
+
+  .advantage-divider {
+    width: clamp(155px, 40vw, 310px);
+  }
+
   .aligned-text {
     font-size: clamp(30px, 8vw, 50px);
   }
 
   .services {
-    padding: 0;
+    padding: 0 clamp(15px, 5vw, 44px) 0;
   }
+
   .services__header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .services__title {
+    padding: 5px 0 10px;
   }
 
   .services__cards {
@@ -1678,9 +1843,7 @@
     justify-content: flex-start;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    margin: 0 -20px;
     padding-left: 20px;
-    padding-bottom: 20px;
   }
 
   .services__cards::-webkit-scrollbar {
@@ -1691,7 +1854,6 @@
     width: 85vw;
     flex-shrink: 0;
     scroll-snap-align: start;
-    margin-right: 20px;
   }
 
   .side-card-pagination,
@@ -1719,18 +1881,231 @@
     width: 10px;
     border-radius: 5px;
   }
+
   .banner {
+    margin-top: clamp(40px, 5vw, 80px);
     padding: clamp(40px, 6vw, 60px) clamp(20px, 4vw, 40px) 0;
   }
 
   .banner__content {
     flex-direction: column;
   }
+
   .timer__number-wrapper {
     width: clamp(56px, 10vw, 148px);
   }
 
+  .footer-section {
+    padding: 0 clamp(15px, 4vw, 30px);
+  }
+
   .banner__offer {
-    min-width: clamp(328px, 31vw, 404px);
+    min-width: clamp(320px, 80vw, 420px);
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .header__top {
+    display: grid;
+    grid-template-columns: 40px 1fr 40px;
+    align-items: center;
+    justify-items: center;
+    padding: 15px 20px;
+    gap: 15px;
+  }
+
+  .logo {
+    grid-column: 2;
+    justify-self: center;
+    max-width: 80px;
+  }
+
+  .header__mobile-menu-btn {
+    grid-column: 1;
+    justify-self: start;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .header__mobile-phone-btn {
+    grid-column: 3;
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .header__links-list,
+  .header__right {
+    display: none;
+  }
+
+  .service-list {
+    display: none;
+  }
+
+  .mobile-service-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 20px 20px;
+    width: calc(100% - 40px);
+    height: 44px;
+    border-radius: 16px;
+    background: var(--additionally);
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--main-text);
+    text-decoration: none;
+    gap: 8px;
+  }
+
+  .side-card {
+    flex: 1 1 100%;
+  }
+
+  .modal__close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #393939;
+    cursor: pointer;
+    z-index: 1001;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .modal__cards-wrapper {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .modal__cards {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+    padding-bottom: 20px;
+    scrollbar-width: none;
+  }
+
+  .modal__cards::-webkit-scrollbar {
+    display: none;
+  }
+
+  .modal-card-mobile {
+    flex: 0 0 calc(100% - 40px);
+    scroll-snap-align: start;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-card-mobile-inner {
+    position: relative;
+    height: 260px;
+    width: 175px;
+  }
+
+  .modal-bg-mobile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .modal-card-mobile .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+    justify-content: center;
+  }
+
+  .modal-card-mobile .modal-content {
+    max-width: 100%;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 30%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+  }
+
+  .modal-card-mobile .modal-button {
+    align-self: center;
+    margin-top: auto;
+  }
+
+  .side-card {
+    display: none !important;
+  }
+
+  .mobile-slider-container {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .mobile-slider-container .modal__cards {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+    padding-bottom: 20px;
+  }
+
+  .mobile-slider-container .modal-card-mobile {
+    flex: 0 0 calc(45% - 40px);
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .service-card {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+    margin-right: 20px;
+    min-width: 280px;
+  }
+
+  .services-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .stats-section {
+    align-items: flex-start;
+  }
+
+  .stats-item {
+    border-radius: clamp(30px, 3vw, 30px);
+  }
+
+  .advantage__header {
+    align-items: flex-start;
+  }
+
+  .services__subtitle {
+    padding-left: 125px;
   }
 }

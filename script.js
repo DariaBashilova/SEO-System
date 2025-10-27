@@ -43,65 +43,154 @@ const modalData = {
   }
 };
 
-// Функция проверки, является ли текущее устройство мобильным (<= 390px)
-const isMobile = () => window.innerWidth <= 390;
+// Функция проверки, является ли текущее устройство мобильным (<= 768px)
+const isMobile = () => window.innerWidth <= 768;
 
 // Глобальные переменные для элементов
 let modalOverlay, servicesContainer, mainCard, sideCards;
 
 // Главный обработчик клика, который переключает логику
 function handleCardClick(clickedCard) {
+  if (isMobile()) {
+    // На мобильных карточки уже видны в слайдере, ничего не делаем
+    return;
+  }
+
   const index = clickedCard.getAttribute('data-index');
   const data = modalData[index];
 
   if (!data) return;
 
+  // --- РЕЖИМ: ДЕСКТОП ---
+  const isActive = modalOverlay.classList.contains('active') &&
+    modalOverlay.getAttribute('data-index') === index;
+
+  // Если кликнули по активной карточке - закрываем
+  if (isActive) {
+    closeModal();
+    return;
+  }
+
+  // Открываем новую модалку
+  makeSpaceForModal(index);
+  createModalDesktop(index, data);
+}
+
+// Функция для авто-открытия карточки на мобильных устройствах
+function initializeServiceCards() {
   if (isMobile()) {
-    // --- РЕЖИМ: МОБИЛЬНЫЙ ---
-    const isModalAlreadyOpen = modalOverlay.classList.contains('active');
-
-    createModalMobile(index, data);
-
-    if (!isModalAlreadyOpen) {
-      modalOverlay.classList.add('active');
-       
-    }
-
-    modalOverlay.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-
+    // На мобильных скрываем side-card и показываем все карточки как слайдер
+    hideSideCardsAndShowMobileSlider();
   } else {
-    // --- РЕЖИМ: ДЕСКТОП ---
-    const isActive = modalOverlay.classList.contains('active') &&
-      modalOverlay.getAttribute('data-index') === index;
-
-    // Если кликнули по активной карточке - закрываем
-    if (isActive) {
-      closeModal();
-      return;
-    }
-
-    // Если другая модалка открыта - закрываем ее мгновенно
-    if (modalOverlay.classList.contains('active')) {
-      closeModal(true);
-    }
-
-    // Открываем новую модалку
-    makeSpaceForModal(index);
-    createModalDesktop(index, data);
+    // На десктопе автоматически открываем вторую карточку (Digital-продукты)
+    const initialCardIndex = '1';
+    makeSpaceForModal(initialCardIndex);
+    createModalDesktop(initialCardIndex, modalData[initialCardIndex]);
   }
 }
 
-// Функция для авто-открытия карточки 02 на мобильных устройствах
-function initializeServiceCards() {
-  if (isMobile()) {
-    const initialCardIndex = '1';
-    createModalMobile(initialCardIndex, modalData[initialCardIndex]);
-    modalOverlay.classList.add('active');
-    
+// Функция для скрытия side-card и показа мобильного слайдера
+function hideSideCardsAndShowMobileSlider() {
+  // Скрываем все side-card
+  sideCards.forEach(card => {
+    card.style.display = 'none';
+  });
+
+  // Скрываем модальное окно на мобильных
+  if (modalOverlay) {
+    modalOverlay.style.display = 'none';
   }
+
+  // Создаем контейнер для мобильного слайдера
+  const mobileSliderContainer = document.createElement('div');
+  mobileSliderContainer.className = 'mobile-slider-container';
+
+  // Создаем слайдер с всеми карточками
+  const modalCardsContainer = document.createElement('div');
+  modalCardsContainer.className = 'modal__cards';
+
+  // Добавляем все карточки в контейнер
+  Object.keys(modalData).forEach(index => {
+    const data = modalData[index];
+
+    const modalCard = document.createElement('div');
+    modalCard.className = 'modal-card-mobile';
+    modalCard.setAttribute('data-slide-index', index);
+
+    modalCard.innerHTML = `
+      <div class="modal-card-mobile-inner">
+        <img src="${data.image}" alt="${data.title}" class="modal-bg-mobile" />
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-number">${data.number}</div>
+            <div class="modal-icon">${data.icon}</div>
+          </div>
+          <h3 class="modal-title">${data.title}</h3>
+          <p class="modal-description">${data.description}</p>
+          <button class="modal-button white-button">
+            Подробнее 
+            <svg width="18" height="15" viewBox="0 0 18 15" fill="none">
+              <path d="M1 7.5L17 7.5M17 7.5L10 0.5M17 7.5L10 14.5" stroke="#393939"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+
+    modalCardsContainer.appendChild(modalCard);
+  });
+
+  mobileSliderContainer.appendChild(modalCardsContainer);
+
+  // Добавляем слайдер после main-card
+  if (mainCard && mainCard.parentNode) {
+    mainCard.parentNode.insertBefore(mobileSliderContainer, mainCard.nextSibling);
+  }
+
+  // Инициализируем пагинацию для мобильного слайдера
+  initMobileSliderPagination(modalCardsContainer);
+}
+
+// Инициализация пагинации для мобильного слайдера
+function initMobileSliderPagination(modalCardsContainer) {
+  const dots = document.querySelectorAll('.side-card-pagination .pagination-dot');
+
+  if (!modalCardsContainer || dots.length === 0) return;
+
+  // Клик по точкам
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      const card = modalCardsContainer.querySelector('.modal-card-mobile');
+      if (!card) return;
+
+      const cardWidth = card.offsetWidth;
+      const scrollPosition = (cardWidth + 15) * index;
+
+      modalCardsContainer.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+
+      // Обновляем активную точку
+      dots.forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+    });
+  });
+
+  // Авто-определение активной точки при скролле
+  let scrollTimeout;
+  modalCardsContainer.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      const scrollLeft = modalCardsContainer.scrollLeft;
+      const cardWidth = modalCardsContainer.querySelector('.modal-card-mobile').offsetWidth;
+      const activeIndex = Math.round(scrollLeft / (cardWidth + 15));
+
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === activeIndex);
+      });
+    }, 50);
+  });
 }
 
 // Функция для создания пространства для модалки
@@ -110,32 +199,24 @@ function makeSpaceForModal(activeIndex) {
 
   const cardToReplace = document.querySelector(`.side-card[data-index="${activeIndex}"]`);
 
-  // 1. Главная карточка остается на своем месте
-  if (mainCard) mainCard.style.order = 0;
+  // Сбрасываем все стили
+  if (mainCard) mainCard.style.order = "0";
 
   sideCards.forEach((card) => {
     const cardIndex = parseInt(card.getAttribute('data-index'));
     card.classList.remove('hidden-card');
-
-    // Карточки до активной остаются на своих местах
-    if (cardIndex < activeIndex) {
-      card.style.order = cardIndex;
-    }
-    // Карточки после активной сдвигаются вправо
-    else if (cardIndex > activeIndex) {
-      card.style.order = cardIndex + 1;
-    }
+    card.style.order = cardIndex.toString();
   });
 
-  // 2. Модалка встает на место активной карточки
-  modalOverlay.style.order = activeIndex;
+  // Модалка занимает место активной карточки
+  modalOverlay.style.order = activeIndex.toString();
 
-  // 3. Скрываем активную карточку
+  // Скрываем активную карточку
   if (cardToReplace) {
     cardToReplace.classList.add('hidden-card');
   }
 
-  // 4. Показываем модалку с анимацией
+  // Показываем модалку
   setTimeout(() => {
     modalOverlay.classList.add('active');
   }, 10);
@@ -179,71 +260,14 @@ function createModalDesktop(index, data) {
   modalButton.addEventListener('click', closeModal);
 }
 
-// Функция создания мобильной модалки
-function createModalMobile(activeIndex, activeData) {
-  modalOverlay.innerHTML = '';
-  modalOverlay.setAttribute('data-index', activeIndex);
-
-  const modalCardsWrapper = document.createElement('div');
-  modalCardsWrapper.className = 'modal__cards-wrapper';
-
-  const closeBtn = document.createElement('button');
-  closeBtn.className = 'modal__close-btn';
-  closeBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-  closeBtn.addEventListener('click', () => {
-    modalOverlay.classList.remove('active');
-     });
-  modalOverlay.appendChild(closeBtn);
-
-  const modalCardsContainer = document.createElement('div');
-  modalCardsContainer.className = 'modal__cards';
-
-  // Добавляем все карточки в контейнер
-  Object.keys(modalData).forEach(index => {
-    const data = modalData[index];
-
-    const modalCard = document.createElement('div');
-    modalCard.className = 'modal-card-mobile';
-    modalCard.setAttribute('data-slide-index', index);
-
-    modalCard.innerHTML = `
-            <div class="modal-card-mobile-inner">
-                <img src="${data.image}" alt="${data.title}" class="modal-bg-mobile" />
-                <div class="modal-header">
-                    <div class="modal-number">${data.number}</div>
-                    <div class="modal-icon">${data.icon}</div>
-                </div>
-                <h3 class="modal-title">${data.title}</h3>
-                <p class="modal-description">${data.description}</p>
-                <button class="modal-button white-button">
-                    Подробнее 
-                    <svg width="18" height="15" viewBox="0 0 18 15" fill="none">
-                        <path d="M1 7.5L17 7.5M17 7.5L10 0.5M17 7.5L10 14.5" stroke="#393939"/>
-                    </svg>
-                </button>
-            </div>
-        `;
-    modalCardsContainer.appendChild(modalCard);
-  });
-
-  modalCardsWrapper.appendChild(modalCardsContainer);
-  modalOverlay.appendChild(modalCardsWrapper);
-
-  // Скроллим к активной карточке
-  const activeCard = modalCardsContainer.querySelector(`[data-slide-index="${activeIndex}"]`);
-  if (activeCard) {
-    setTimeout(() => {
-      const scrollPosition = activeCard.offsetLeft - 20;
-      modalCardsContainer.scrollTo({
-        left: scrollPosition,
-        behavior: 'smooth'
-      });
-    }, 0);
-  }
+// Функция создания мобильной модалки (не используется на мобильных)
+function createModalMobile() {
+  // На мобильных модальное окно не используется
+  return;
 }
 
 // Функция закрытия модалки
-function closeModal(immediate = false) {
+function closeModal() {
   const activeIndex = modalOverlay.getAttribute('data-index');
 
   if (!activeIndex) return;
@@ -262,22 +286,147 @@ function closeModal(immediate = false) {
       sideCards.forEach((card) => {
         card.style.order = 'unset';
       });
-      // modalOverlay.style.order = '999';
-    }  
+    }
 
     modalOverlay.removeAttribute('data-index');
     modalOverlay.innerHTML = '';
   };
 
-  if (immediate) {
-    resetStyles();
-  } else {
-    // Ждем завершения анимации
-    setTimeout(resetStyles, 400);
-  }
+  // Ждем завершения анимации
+  setTimeout(resetStyles, 400);
 }
 
-// Инициализация после загрузки DOM
+// ==================== MOBILE MENU FUNCTIONALITY ====================
+
+function initMobileMenu() {
+  const mobileMenuBtn = document.querySelector('.header__mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+  const mobileMenuClose = document.getElementById('mobileMenuClose');
+  const body = document.body;
+
+  // Проверяем, что элементы существуют
+  if (!mobileMenuBtn || !mobileMenu || !mobileMenuOverlay || !mobileMenuClose) {
+    console.log('Mobile menu elements not found');
+    return;
+  }
+
+  function openMenu() {
+    mobileMenu.classList.add('active');
+    mobileMenuOverlay.classList.add('active');
+    body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    mobileMenu.classList.remove('active');
+    mobileMenuOverlay.classList.remove('active');
+    body.style.overflow = '';
+  }
+
+  // Открытие меню
+  mobileMenuBtn.addEventListener('click', openMenu);
+
+  // Закрытие меню
+  mobileMenuClose.addEventListener('click', closeMenu);
+  mobileMenuOverlay.addEventListener('click', closeMenu);
+
+  // Закрытие по клавише Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+      closeMenu();
+    }
+  });
+
+  // Закрытие меню при клике на ссылку
+  const mobileMenuLinks = document.querySelectorAll('.mobile-menu__link');
+  mobileMenuLinks.forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+}
+
+// Инициализация слайдера "Advantage" (Преимущества)
+function initAdvantageSlider() {
+  const cardsContainer = document.querySelector('.advantage__cards');
+  const dots = document.querySelectorAll('.advantage-pagination .pagination-dot');
+
+  if (!cardsContainer || dots.length === 0) return;
+
+  // Клик по точкам
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      const card = cardsContainer.querySelector('.advantage-card');
+      if (!card) return;
+
+      // Вычисляем ширину карточки + отступ (20px в твоем CSS)
+      const cardWidth = card.offsetWidth;
+      const scrollPosition = (cardWidth + 20) * index;
+
+      cardsContainer.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+      // Обновляем активную точку
+      dots.forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+    });
+  });
+
+  // Авто-определение активной точки при скролле
+  let scrollTimeout;
+  cardsContainer.addEventListener('scroll', () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+
+      const scrollLeft = cardsContainer.scrollLeft;
+      const cardWidth = cardsContainer.querySelector('.advantage-card').offsetWidth;
+      const activeIndex = Math.round(scrollLeft / (cardWidth + 20));
+
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === activeIndex);
+      });
+    }, 50);
+  });
+}
+
+// Инициализация слайдера "Services" (Наши услуги)
+function initMainServicesSlider() {
+  const cardsContainer = document.querySelector('.services__cards');
+  const dots = document.querySelectorAll('.services-pagination .pagination-dot');
+
+  if (!cardsContainer || dots.length === 0) return;
+
+  // Клик по точкам
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      const card = cardsContainer.querySelector('.service-card');
+      if (!card) return;
+
+      const cardWidth = card.offsetWidth;
+      // + 20px (gap/margin)
+      const scrollPosition = (cardWidth + 20) * index;
+
+      cardsContainer.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+    });
+  });
+
+  // Авто-определение активной точки при скролле
+  cardsContainer.addEventListener('scroll', () => {
+    const scrollLeft = cardsContainer.scrollLeft;
+    const cardWidth = cardsContainer.querySelector('.service-card').offsetWidth;
+    // + 20px (gap/margin)
+    const activeIndex = Math.round(scrollLeft / (cardWidth + 20));
+
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === activeIndex);
+    });
+  });
+}
+
+// ==================== INITIALIZE ALL FUNCTIONALITY ====================
+
 document.addEventListener('DOMContentLoaded', function () {
   // Инициализация глобальных переменных
   modalOverlay = document.getElementById('modalOverlay');
@@ -301,19 +450,20 @@ document.addEventListener('DOMContentLoaded', function () {
     servicesContainer.appendChild(modalOverlay);
   }
 
-  // Привязка кликов к карточкам
-  sideCards.forEach(card => {
-    card.addEventListener('click', function () {
-      handleCardClick(this);
+  // Привязка кликов к карточкам (только для десктопа)
+  if (!isMobile()) {
+    sideCards.forEach(card => {
+      card.addEventListener('click', function () {
+        handleCardClick(this);
+      });
     });
-  });
+  }
 
   // Авто-открытие при загрузке
   initializeServiceCards();
 
   // Advantage Cards Flip Interaction
   const advantageCards = document.querySelectorAll('.advantage-card');
-
   advantageCards.forEach(card => {
     card.addEventListener('click', function () {
       advantageCards.forEach(c => {
@@ -331,164 +481,52 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Логика слайдера для сервисов
-  const sliderContainer = document.querySelector('.services__cards');
-  const dotsContainer = document.querySelector('.services-pagination');
+  // Инициализация слайдеров
+  initAdvantageSlider();
+  initMainServicesSlider();
 
-  if (sliderContainer && dotsContainer && isMobile()) {
-    const dots = dotsContainer.querySelectorAll('.pagination-dot');
-    const card = sliderContainer.querySelector('.service-card');
-    if (!card) return;
+  // Timer Script
+  const timerDays = document.querySelector('.timer__unit:nth-child(1) .timer__number');
+  const timerHours = document.querySelector('.timer__unit:nth-child(3) .timer__number');
+  const timerMinutes = document.querySelector('.timer__unit:nth-child(5) .timer__number');
+  const timerSeconds = document.querySelector('.timer__unit:nth-child(7) .timer__number');
 
-    const cardWidth = card.offsetWidth;
-    const gap = 20;
-
-    dotsContainer.addEventListener('click', (event) => {
-      if (event.target.classList.contains('pagination-dot')) {
-        const index = parseInt(event.target.dataset.slideTo);
-        sliderContainer.scrollLeft = index * (cardWidth + gap);
-      }
-    });
-
-    sliderContainer.addEventListener('scroll', () => {
-      const currentCardIndex = Math.round(sliderContainer.scrollLeft / (cardWidth + gap));
-
-      dots.forEach((dot, index) => {
-        dot.classList.remove('active');
-        if (index === currentCardIndex) {
-          dot.classList.add('active');
-        }
-      });
-    });
-
-    if (dots.length > 0) {
-      dots[0].classList.add('active');
-    }
-  }
-
-  // Логика слайдера для преимуществ
-  const advantageSlider = document.querySelector('.advantage__cards');
-  const advantageDotsContainer = document.querySelector('.advantage-pagination');
-
-  if (advantageSlider && advantageDotsContainer && isMobile()) {
-    const advantageDots = advantageDotsContainer.querySelectorAll('.pagination-dot');
-    const advantageCard = advantageSlider.querySelector('.advantage-card');
-    if (!advantageCard) return;
-
-    const advantageCardWidth = advantageCard.offsetWidth;
-    const advantageGap = 20;
-
-    advantageDotsContainer.addEventListener('click', (event) => {
-      if (event.target.classList.contains('pagination-dot')) {
-        const index = parseInt(event.target.dataset.slideTo);
-        advantageSlider.scrollLeft = index * (advantageCardWidth + advantageGap);
-      }
-    });
-
-    advantageSlider.addEventListener('scroll', () => {
-      const currentCardIndex = Math.round(advantageSlider.scrollLeft / (advantageCardWidth + advantageGap));
-
-      advantageDots.forEach((dot, index) => {
-        dot.classList.remove('active');
-        if (index === currentCardIndex) {
-          dot.classList.add('active');
-        }
-      });
-    });
-
-    if (advantageDots.length > 0) {
-      advantageDots[0].classList.add('active');
-    }
-  }
-
-  // Логика слайдера для side-card (мобильная версия)
-  const sideCardSlider = document.querySelector('.advantage__cards');
-  const sideCardDotsContainer = document.querySelector('.side-card-pagination');
-
-  if (sideCardSlider && sideCardDotsContainer && isMobile()) {
-    const sideCardDots = sideCardDotsContainer.querySelectorAll('.pagination-dot');
-
-    sideCardDotsContainer.addEventListener('click', (event) => {
-      if (event.target.classList.contains('pagination-dot')) {
-        const index = parseInt(event.target.dataset.slideTo);
-        // На мобильных скроллим модалку вместо side-card
-        const modalCardsContainer = modalOverlay.querySelector('.modal__cards');
-        if (modalCardsContainer) {
-          const cards = modalCardsContainer.querySelectorAll('.modal-card-mobile');
-          if (cards[index]) {
-            const scrollPosition = cards[index].offsetLeft - 20;
-            modalCardsContainer.scrollTo({
-              left: scrollPosition,
-              behavior: 'smooth'
-            });
-          }
-        }
-      }
-    });
-
-    // Обновляем пагинацию при скролле модалки
-    const modalCardsContainer = modalOverlay.querySelector('.modal__cards');
-    if (modalCardsContainer) {
-      modalCardsContainer.addEventListener('scroll', () => {
-        const cards = modalCardsContainer.querySelectorAll('.modal-card-mobile');
-        if (cards.length > 0) {
-          const cardWidth = cards[0].offsetWidth + 20;
-          const currentCardIndex = Math.round(modalCardsContainer.scrollLeft / cardWidth);
-
-          sideCardDots.forEach((dot, index) => {
-            dot.classList.remove('active');
-            if (index === currentCardIndex) {
-              dot.classList.add('active');
-            }
-          });
-        }
-      });
-    }
-  }
-
-// Timer Script
-const timerDays = document.querySelector('.timer__unit:nth-child(1) .timer__number');
-const timerHours = document.querySelector('.timer__unit:nth-child(3) .timer__number');
-const timerMinutes = document.querySelector('.timer__unit:nth-child(5) .timer__number');
-const timerSeconds = document.querySelector('.timer__unit:nth-child(7) .timer__number');
-
-if (timerDays && timerHours && timerMinutes && timerSeconds) {
-
-    // 1. Получаем начальные значения и преобразуем их в числа (parseInt)
+  if (timerDays && timerHours && timerMinutes && timerSeconds) {
     let days = parseInt(timerDays.textContent, 10);
     let hours = parseInt(timerHours.textContent, 10);
     let minutes = parseInt(timerMinutes.textContent, 10);
     let seconds = parseInt(timerSeconds.textContent, 10);
 
     function updateTimer() {
-        if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
-            clearInterval(timerInterval); // Останавливаем таймер, когда достигнет 0
-            return;
-        }
+      if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+        clearInterval(timerInterval);
+        return;
+      }
 
-        // 2. Логика уменьшения времени
-        seconds--;
+      seconds--;
 
-        if (seconds < 0) {
-            seconds = 59;
-            minutes--;
-        }
-        if (minutes < 0) {
-            minutes = 59;
-            hours--;
-        }
-        if (hours < 0) {
-            hours = 23;
-            days--;
-        }
+      if (seconds < 0) {
+        seconds = 59;
+        minutes--;
+      }
+      if (minutes < 0) {
+        minutes = 59;
+        hours--;
+      }
+      if (hours < 0) {
+        hours = 23;
+        days--;
+      }
 
-        // 3. Обновляем DOM
-        timerDays.textContent = String(days).padStart(2, '0');
-        timerHours.textContent = String(hours).padStart(2, '0');
-        timerMinutes.textContent = String(minutes).padStart(2, '0');
-        timerSeconds.textContent = String(seconds).padStart(2, '0');
+      timerDays.textContent = String(days).padStart(2, '0');
+      timerHours.textContent = String(hours).padStart(2, '0');
+      timerMinutes.textContent = String(minutes).padStart(2, '0');
+      timerSeconds.textContent = String(seconds).padStart(2, '0');
     }
 
-    const timerInterval = setInterval(updateTimer, 1000); // Сохраняем ссылку на интервал
-}
+    const timerInterval = setInterval(updateTimer, 1000);
+  }
+
+  // Инициализация мобильного меню
+  initMobileMenu();
 });
