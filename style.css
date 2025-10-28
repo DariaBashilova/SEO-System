@@ -344,6 +344,13 @@
 }
 
 /* ===== SIDE CARDS STYLES ===== */
+.side__cards {
+  display: flex;
+  gap: clamp(8px, 1.5vw, 15px);
+  align-items: flex-start;
+  transition: all 0.4s ease;
+}
+
 .side-card {
   width: clamp(50px, 6vw, 69px);
   height: clamp(250px, 30vw, 348px);
@@ -646,6 +653,14 @@
   height: 100%;
 }
 
+.stats-icon-desktop {
+  display: flex;
+}
+
+.stats-icon-mob {
+  display: none;
+}
+
 .stats-info {
   display: flex;
   flex-direction: column;
@@ -653,13 +668,21 @@
   gap: 8px;
 }
 
-.stats-label {
+.stats-label-desktop {
   font-family: var(--font-family);
-
   font-size: clamp(12px, 1.2vw, 14px);
   line-height: 150%;
   color: var(--main-text);
   white-space: nowrap;
+}
+
+.stats-label {
+  font-family: var(--font-family);
+  font-size: clamp(12px, 1.2vw, 14px);
+  line-height: 150%;
+  color: var(--main-text);
+  white-space: nowrap;
+  display: none;
 }
 
 .stats-number {
@@ -1431,6 +1454,14 @@
     width: clamp(150px, 30vw, 310px);
   }
 
+  .stats-label-desktop {
+    display: none;
+  }
+
+  .stats-label {
+    display: block;
+  }
+
   .stats-text {
     padding-top: 0;
   }
@@ -1453,9 +1484,29 @@
     font-size: clamp(20px, 2.5vw, 20px);
   }
 
+  .stats-icon-desktop {
+    display: none;
+  }
+
+  .stats-icon-mob {
+    display: flex;
+  }
+
   .stats-icon {
     width: calc(40px + 1vw);
     height: calc(40px + 1vw);
+  }
+
+  .stats-icon-mob {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--white);
+    border-radius: clamp(20px, 3vw, 33px);
+    padding: clamp(2px, 0.4vw, 3px) clamp(4px, 0.6vw, 6px);
+    width: calc(40px + 1vw);
+    height: calc(40px + 1vw);
+    background: var(--additionally);
   }
 
   .service-card {
@@ -1560,7 +1611,8 @@
 
   .modal-content {
     width: clamp(150px, 14vw, 187px);
-    height: clamp(270px, 26vw, 318px);
+    height: clamp(255px, 26vw, 318px);
+    padding: clamp(10px, 1vw, 20px);
   }
 
   .advantage-card__content {
@@ -1749,12 +1801,8 @@
     height: clamp(250px, 26vw, 318px);
   }
 
-  /* .modal-bg {
-    height: clamp(285px, 29vw, 347px);
-  } */
-
   .modal-title {
-    font-size: clamp(15px, 2.5vw, 21px);
+    font-size: clamp(15px, 1.5vw, 21px);
   }
 
   .modal-icon {
@@ -1787,12 +1835,11 @@
   }
 
   .stats-item {
-    width: 100%; /* Изменил с фиксированной на 100% */
-    min-width: 0; /* Важно для flex/grid */
+    width: 100%;
+    min-width: 0;
     max-width: 100%;
     justify-content: center;
     align-items: center;
-    /* gap: clamp(40px, 1vw, 12px); */
     border-radius: clamp(20px, 5vw, 61px);
   }
 
@@ -1811,7 +1858,7 @@
   }
 
   .advantage__container {
-    gap: clamp(30px, 4vw, 60px);
+    gap: clamp(27px, 4vw, 60px);
   }
 
   .advantage__header {
@@ -1951,15 +1998,6 @@
     margin-top: 40px;
   }
 
-  .modal__cards {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 20px;
-    padding-bottom: 20px;
-    scrollbar-width: none;
-  }
-
   .modal__cards::-webkit-scrollbar {
     display: none;
   }
@@ -2058,11 +2096,13 @@
 }
 
 @media (max-width: 480px) {
-  .service-card {
-    flex: 0 0 85%;
-    scroll-snap-align: start;
-    margin-right: 20px;
-    min-width: 280px;
+  .mobile-slider-container .modal-card-mobile {
+    flex: 0 0 calc(72% - 92px);
+  }
+
+  .modal-content {
+    margin: 0px 18px;
+    padding-top: 10px;
   }
 
   .stats-section {
@@ -2071,6 +2111,7 @@
 
   .stats-item {
     border-radius: clamp(30px, 3vw, 30px);
+    height: clamp(71px, 8.5vw, 87px);
   }
 
   .stats-info {
@@ -2087,9 +2128,38 @@
 
   .services__subtitle {
     padding-left: 125px;
+    font-size: clamp(11px, 1.8vw, 18px);
+  }
+
+  .advantage-card {
+    min-width: clamp(332px, 20vw, 280px);
   }
 
   .advantage__desc-item {
     width: 100%;
+  }
+
+  .advantage__title {
+    font-size: clamp(36px, 3vw, 74px);
+  }
+
+  .advantage-divider {
+    width: clamp(290px, 40vw, 310px);
+  }
+
+  .service-card {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+    margin-right: 20px;
+    min-width: 287px;
+  }
+
+  .service-card__name {
+    font-size: clamp(28px, 3.5vw, 36px);
+    padding-bottom: 40px;
+  }
+
+  .banner__offer {
+    min-width: clamp(333px, 80vw, 420px);
   }
 }

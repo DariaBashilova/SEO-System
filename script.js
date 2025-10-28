@@ -357,36 +357,28 @@ function initAdvantageSlider() {
       const card = cardsContainer.querySelector('.advantage-card');
       if (!card) return;
 
-      // Вычисляем ширину карточки + отступ (20px в твоем CSS)
       const cardWidth = card.offsetWidth;
-      const scrollPosition = (cardWidth + 20) * index;
+            const scrollPosition = (cardWidth + 20) * index;
 
       cardsContainer.scrollTo({
         left: scrollPosition,
         behavior: 'smooth'
       });
-      // Обновляем активную точку
-      dots.forEach(d => d.classList.remove('active'));
-      dot.classList.add('active');
     });
   });
 
   // Авто-определение активной точки при скролле
-  let scrollTimeout;
   cardsContainer.addEventListener('scroll', () => {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
+    const scrollLeft = cardsContainer.scrollLeft;
+    const cardWidth = cardsContainer.querySelector('.advantage-card').offsetWidth;
+     const activeIndex = Math.round(scrollLeft / (cardWidth + 20));
 
-      const scrollLeft = cardsContainer.scrollLeft;
-      const cardWidth = cardsContainer.querySelector('.advantage-card').offsetWidth;
-      const activeIndex = Math.round(scrollLeft / (cardWidth + 20));
-
-      dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === activeIndex);
-      });
-    }, 50);
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === activeIndex);
+    });
   });
 }
+
 
 // Инициализация слайдера "Services" (Наши услуги)
 function initMainServicesSlider() {
@@ -402,8 +394,7 @@ function initMainServicesSlider() {
       if (!card) return;
 
       const cardWidth = card.offsetWidth;
-      // + 20px (gap/margin)
-      const scrollPosition = (cardWidth + 20) * index;
+            const scrollPosition = (cardWidth + 20) * index;
 
       cardsContainer.scrollTo({
         left: scrollPosition,
@@ -416,8 +407,7 @@ function initMainServicesSlider() {
   cardsContainer.addEventListener('scroll', () => {
     const scrollLeft = cardsContainer.scrollLeft;
     const cardWidth = cardsContainer.querySelector('.service-card').offsetWidth;
-    // + 20px (gap/margin)
-    const activeIndex = Math.round(scrollLeft / (cardWidth + 20));
+        const activeIndex = Math.round(scrollLeft / (cardWidth + 20));
 
     dots.forEach((dot, index) => {
       dot.classList.toggle('active', index === activeIndex);
